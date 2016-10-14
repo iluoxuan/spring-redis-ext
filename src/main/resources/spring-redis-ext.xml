@@ -26,6 +26,7 @@
           p:timeout="${redis.server.timeout}"
           p:password="${redis.server.pwd}"
           p:poolConfig-ref="poolConfig"
+          p:database="${redis.db}"
           p:usePool="true"/>
 
     <bean id="keySerializer" class="com.mljr.spring.redis.ext.StringSerializer"></bean>
