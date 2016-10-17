@@ -11,48 +11,46 @@
 
     <cache:annotation-driven proxy-target-class="true" cache-manager="cacheManager" key-generator="cacheKeyGenerator"/>
 
-    <context:property-placeholder location="classpath:redis.properties" ignore-unresolvable="true"/>
-
-    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
         <property name="maxIdle" value="${redis.maxIdle}"/>
         <property name="maxTotal" value="${redis.maxTotal}"/>
         <property name="minIdle" value="${redis.minIdle}"/>
         <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
     </bean>
 
-    <bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
           p:hostName="${redis.server.host}"
           p:port="${redis.server.port}"
           p:timeout="${redis.server.timeout}"
           p:password="${redis.server.pwd}"
-          p:poolConfig-ref="poolConfig"
+          p:poolConfig-ref="jedisPoolConfig"
           p:database="${redis.db}"
           p:usePool="true"/>
 
-    <bean id="keySerializer" class="com.mljr.spring.redis.ext.StringSerializer"></bean>
+    <bean id="stringSerializer" class="com.mljr.spring.redis.ext.StringSerializer"></bean>
 
-    <bean id="valueSerializer" class="com.mljr.spring.redis.ext.FastjsonSerializer"></bean>
+    <bean id="fastjsonSerializer" class="com.mljr.spring.redis.ext.FastjsonSerializer"></bean>
 
     <bean id="cacheKeyGenerator" class="com.mljr.spring.redis.ext.CacheKeyGenerator"></bean>
 
-    <bean id="cachePrefix" class="com.mljr.spring.redis.ext.NameSpaceCachePrefix">
+    <bean id="nameSpaceCachePrefix" class="com.mljr.spring.redis.ext.NameSpaceCachePrefix">
 
         <property name="nameSpace" value="${redis.cache.namespace}"/>
     </bean>
 
     <!-- 缓存配置 -->
-    <bean id="redisCacheTemplate" class="org.springframework.data.redis.core.RedisTemplate"
-          p:connectionFactory-ref="jedisConnFactory"
-          p:keySerializer-ref="keySerializer"
-          p:hashKeySerializer-ref="keySerializer"
-          p:valueSerializer-ref="valueSerializer"
-          p:hashValueSerializer-ref="valueSerializer"/>
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate"
+          p:connectionFactory-ref="jedisConnectionFactory"
+          p:keySerializer-ref="stringSerializer"
+          p:hashKeySerializer-ref="stringSerializer"
+          p:valueSerializer-ref="fastjsonSerializer"
+          p:hashValueSerializer-ref="fastjsonSerializer"/>
 
 
     <bean id="cacheManager" class="org.springframework.data.redis.cache.RedisCacheManager">
-        <constructor-arg index="0" ref="redisCacheTemplate"/>
+        <constructor-arg index="0" ref="redisTemplate"/>
         <property name="usePrefix" value="true"/>
-        <property name="cachePrefix" ref="cachePrefix"/>
+        <property name="cachePrefix" ref="nameSpaceCachePrefix"/>
         <property name="expires">
             <map>
             </map>
@@ -61,7 +59,7 @@
 
     <!-- redis 操作配置-->
     <bean id="stringRedisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate"
-          p:connectionFactory-ref="jedisConnFactory"/>
+          p:connectionFactory-ref="jedisConnectionFactory"/>
 
     <!-- redis分布式锁 -->
     <bean id="redisDistributedLock" class="com.mljr.spring.redis.ext.RedisDistributedLock">

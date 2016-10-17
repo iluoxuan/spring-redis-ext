@@ -5,10 +5,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.interceptor.CacheResolver;
 import org.springframework.cache.interceptor.KeyGenerator;
+import org.springframework.cache.interceptor.SimpleCacheResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -22,7 +23,6 @@ import redis.clients.jedis.JedisPoolConfig;
  */
 @Configuration
 @EnableCaching(proxyTargetClass = true)
-@PropertySource("classpath:/redis.properties")
 public class RedisExtConfiguration extends CachingConfigurerSupport {
 
 
@@ -169,4 +169,9 @@ public class RedisExtConfiguration extends CachingConfigurerSupport {
 
     }
 
+    @Override
+    public CacheResolver cacheResolver() {
+
+        return new SimpleCacheResolver(cacheManager());
+    }
 }

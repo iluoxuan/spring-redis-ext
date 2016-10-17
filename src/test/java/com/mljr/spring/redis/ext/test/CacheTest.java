@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * <p>
  * sout sy....快捷键
  */
+
 public class CacheTest extends AbstractTest {
 
     @Autowired
@@ -20,6 +21,13 @@ public class CacheTest extends AbstractTest {
 
         String result = cacheService.getById(110);
 
+        System.out.println(result);
+    }
+
+    @Test
+    public void get() {
+
+        String result = cacheService.get();
         System.out.println(result);
     }
 }

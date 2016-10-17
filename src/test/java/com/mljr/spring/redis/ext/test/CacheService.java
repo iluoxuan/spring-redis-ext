@@ -8,13 +8,19 @@ import org.springframework.stereotype.Service;
  * Created by iluoxuan on 16/10/12.
  */
 @Service
-@CacheConfig(cacheNames = "test_cache")
+@CacheConfig(cacheNames = "cache")
 public class CacheService {
 
     @Cacheable(key = "#id")
     public String getById(int id) {
 
-        return "hello xx test";
+        return "hello xxsss test";
+    }
+
+    @Cacheable
+    public String get() {
+
+        return "xxxxCacheable";
     }
 
 
