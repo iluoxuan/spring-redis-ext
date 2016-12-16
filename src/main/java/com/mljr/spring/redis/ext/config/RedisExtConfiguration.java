@@ -1,6 +1,7 @@
 package com.mljr.spring.redis.ext.config;
 
 import com.mljr.spring.redis.ext.*;
+import com.mljr.spring.redis.ext.service.RedisLimitService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -173,5 +174,10 @@ public class RedisExtConfiguration extends CachingConfigurerSupport {
     public CacheResolver cacheResolver() {
 
         return new SimpleCacheResolver(cacheManager());
+    }
+
+    public RedisLimitService limitCountRule(){
+
+        return new RedisLimitService();
     }
 }
