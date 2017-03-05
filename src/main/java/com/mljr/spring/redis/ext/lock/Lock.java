@@ -1,7 +1,5 @@
 package com.mljr.spring.redis.ext.lock;
 
-import java.util.concurrent.TimeUnit;
-
 import com.mljr.spring.redis.ext.annotation.DistributeLock;
 
 /**
@@ -12,8 +10,6 @@ import com.mljr.spring.redis.ext.annotation.DistributeLock;
 public interface Lock {
 
 	boolean tryLock(String key);
-
-	boolean tryLock(String key, TimeUnit unit);
 
 	void unlock();
 

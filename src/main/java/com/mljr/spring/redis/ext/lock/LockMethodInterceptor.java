@@ -41,9 +41,9 @@ public class LockMethodInterceptor implements MethodInterceptor {
 
 		String lockKey = getLockKey(distributeLock, invocation);
 
-		if (lock.tryLock(lockKey)) {
+		if (!lock.tryLock(lockKey)) {
 
-			throw new DistributeLockException(distributeLock.errMsg());
+			throw new DistributeLockException(distributeLock.errMsg() + " lockkey=" + lockKey);
 		}
 
 		try {

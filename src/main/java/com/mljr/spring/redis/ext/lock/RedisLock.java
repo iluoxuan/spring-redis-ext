@@ -20,11 +20,6 @@ public class RedisLock extends AbstractLock {
 	private StringRedisTemplate stringRedisTemplate;
 
 	@Override
-	public boolean tryLock(String key, TimeUnit unit) {
-		return false;
-	}
-
-	@Override
 	protected boolean tryLockInternal(String lockName, long expireTime) {
 
 		BoundValueOperations stringOperations = stringRedisTemplate.boundValueOps(lockName);
