@@ -1,6 +1,5 @@
 package com.mljr.spring.redis.ext.test;
 
-
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,21 +12,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class CacheTest extends AbstractTest {
 
-    @Autowired
-    CacheService cacheService;
+	@Autowired
+	CacheService cacheService;
 
-    @Test
-    public void getByIdTest() {
+	@Test
+	public void getByIdTest() {
 
-        String result = cacheService.getById(110);
+		String result = cacheService.getById(110);
 
-        System.out.println(result);
-    }
+		System.out.println(result);
 
-    @Test
-    public void get() {
+		String result2 = cacheService.getSById(10);
 
-        String result = cacheService.get();
-        System.out.println(result);
-    }
+		System.out.println(result2);
+
+	}
+
+	@Test
+	public void get() {
+
+		String result = cacheService.getSById(11);
+		System.out.println(result);
+	}
 }

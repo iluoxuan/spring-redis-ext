@@ -1,5 +1,6 @@
 package com.mljr.spring.redis.ext.service;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import com.mljr.spring.redis.ext.utils.Utils;
 
 /**
  * Created by junqing.li on 16/1/7.
- *
+ * redis 限制业务
  */
 public class RedisLimitService {
 
@@ -34,6 +35,28 @@ public class RedisLimitService {
 	}
 
 	/**
+	 * 是否标记
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public boolean isMarked(String key) {
+
+		return notOverCount(key, 1);
+	}
+
+	/**
+	 * 标记
+	 * 
+	 * @param key
+	 * @param seconds
+	 */
+	public void mark(String key, long seconds) {
+
+		incrCount(key, seconds);
+	}
+
+	/**
 	 * 添加 次数
 	 *
 	 * @param key
@@ -45,7 +68,11 @@ public class RedisLimitService {
 
 		long cnt = operations.increment(1);
 
-		if (cnt <= 1) {
+		Long existExpire = operations.getExpire();
+
+		// 不存在设置超时时间
+		if (Objects.isNull(existExpire) || existExpire <= 0) {
+
 			operations.expire(seconds, TimeUnit.SECONDS);
 		}
 	}
